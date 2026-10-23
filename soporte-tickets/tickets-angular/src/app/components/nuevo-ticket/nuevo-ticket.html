@@ -1,0 +1,49 @@
+<section class="formulario">
+  <h2>Registrar ticket</h2>
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <label for="asunto">Asunto</label>
+    <input id="asunto" type="text" formControlName="asunto">
+    @if (formulario.controls.asunto.touched && formulario.controls.asunto.invalid) {
+      <small>Ingrese un asunto de entre 5 y 150 caracteres.</small>
+    }
+
+    <label for="solicitante">Solicitante</label>
+    <input id="solicitante" type="text" formControlName="solicitante">
+    @if (formulario.controls.solicitante.touched && formulario.controls.solicitante.invalid) {
+      <small>El solicitante es obligatorio.</small>
+    }
+
+    <label for="descripcion">Descripción del problema</label>
+    <textarea id="descripcion" rows="4" formControlName="descripcion"></textarea>
+    @if (formulario.controls.descripcion.touched && formulario.controls.descripcion.invalid) {
+      <small>Describa el problema con al menos 10 caracteres.</small>
+    }
+
+    <label for="categoria">Categoría</label>
+    <select id="categoria" formControlName="categoria">
+      <option value="">Seleccione...</option>
+      @for (c of categorias; track c) { <option [value]="c">{{ c }}</option> }
+    </select>
+    @if (formulario.controls.categoria.touched && formulario.controls.categoria.invalid) {
+      <small>Seleccione una categoría.</small>
+    }
+
+    <label for="prioridad">Prioridad</label>
+    <select id="prioridad" formControlName="prioridad">
+      <option value="">Seleccione...</option>
+      @for (p of prioridades; track p) { <option [value]="p">{{ p }}</option> }
+    </select>
+    @if (formulario.controls.prioridad.touched && formulario.controls.prioridad.invalid) {
+      <small>Seleccione una prioridad.</small>
+    }
+
+    <label for="estado">Estado</label>
+    <select id="estado" formControlName="estado">
+      @for (e of estados; track e) { <option [value]="e">{{ e }}</option> }
+    </select>
+
+    <button type="submit">Guardar ticket</button>
+  </form>
+
+  @if (error) { <p class="error">{{ error }}</p> }
+</section>

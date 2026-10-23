@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 import { Inicio } from './components/inicio/inicio';
-import { Libros } from './components/libros/libros';
-import { NuevoLibro } from './components/nuevo-libro/nuevo-libro';
-import { EditarLibro } from './components/editar-libro/editar-libro';
+import { Tickets } from './components/tickets/tickets';
+import { NuevoTicket } from './components/nuevo-ticket/nuevo-ticket';
+import { EditarTicket } from './components/editar-ticket/editar-ticket';
 
 export const routes: Routes = [
   { path: '', component: Inicio },
-  { path: 'libros', component: Libros },
-  { path: 'nuevo-libro', component: NuevoLibro },
-  { path: 'editar-libro/:id', component: EditarLibro },
+  { path: 'tickets', component: Tickets },
+  { path: 'nuevo-ticket', component: NuevoTicket },
+  { path: 'editar-ticket/:id', component: EditarTicket },
   { path: '**', redirectTo: '' }
 ];
