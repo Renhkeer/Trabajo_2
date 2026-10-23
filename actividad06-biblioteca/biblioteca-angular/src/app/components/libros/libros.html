@@ -1,0 +1,42 @@
+<section class="contenedor">
+  <h2>Listado de libros</h2>
+
+  @if (cargando) {
+    <p>Cargando libros...</p>
+  }
+
+  @if (error) {
+    <div class="error">
+      <p>{{ error }}</p>
+      <button type="button" (click)="cargarLibros()">Reintentar</button>
+    </div>
+  }
+
+  @if (!cargando && !error) {
+    <div class="libros">
+      @for (libro of libros; track libro.id) {
+        <article class="libro">
+          <h3>{{ libro.titulo }}</h3>
+          <p><strong>Autor:</strong> {{ libro.autor }}</p>
+          <p><strong>Categoría:</strong> {{ libro.categoria }}</p>
+          <p><strong>Editorial:</strong> {{ libro.editorial }}</p>
+          <p><strong>Año:</strong> {{ libro.anio }}</p>
+
+          @if (libro.disponible) {
+            <p class="disponible">Disponible</p>
+          } @else {
+            <p class="no-disponible">No disponible</p>
+          }
+
+          <div class="acciones">
+            <button type="button" (click)="editar(libro.id)">Editar</button>
+            <button class="eliminar" type="button"
+                    (click)="eliminar(libro.id)">Eliminar</button>
+          </div>
+        </article>
+      } @empty {
+        <p>No existen libros registrados.</p>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,14 @@
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 15px;
+  background: #f5f7f9;
+  border-bottom: 1px solid #d8dde3;
+}
+.menu a {
+  color: #263238;
+  text-decoration: none;
+  font-weight: 700;
+}
+.menu a.activo { color: #0b4f8a; }

@@ -1,0 +1,8 @@
+.cabecera {
+  background: #0b4f8a;
+  color: white;
+  text-align: center;
+  padding: 28px 16px;
+}
+.cabecera h1 { margin: 0 0 8px; }
+.cabecera p { margin: 0; }

@@ -1,0 +1,7 @@
+.formulario { max-width: 650px; margin: 30px auto; padding: 25px; border: 1px solid #d8dde3; border-radius: 10px; }
+form { display: flex; flex-direction: column; gap: 9px; }
+input { padding: 10px; border: 1px solid #b0bec5; border-radius: 5px; }
+.botones { display: flex; gap: 10px; margin-top: 12px; }
+button { padding: 12px; border: 0; border-radius: 5px; background: #0b4f8a; color: white; cursor: pointer; }
+button.secundario { background: #607d8b; }
+.error { color: #c62828; }
