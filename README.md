@@ -126,14 +126,14 @@ Los tests que crea Angular por defecto fallaban porque los componentes que usan 
 
 | Prueba | Resultado esperado | Resultado |
 |--------|--------------------|-----------|
-| Inicio | Frontend, API y BD se ejecutan siguiendo este README | Pendiente |
-| GET | La interfaz muestra los tickets guardados | Pendiente |
-| POST | Un ticket creado desde Angular aparece en la base de datos | Pendiente |
-| PUT | Una modificación desde Angular permanece al recargar | Pendiente |
-| DELETE | Un ticket eliminado desaparece de la interfaz y de la BD | Pendiente |
-| Validación | El formulario impide enviar datos obligatorios vacíos o inválidos | Pendiente |
-| Error | Con la API apagada, la interfaz muestra un mensaje de error | Pendiente |
-| Persistencia | Los registros permanecen después de reiniciar la API | Pendiente |
+| Inicio | Frontend, API y BD se ejecutan siguiendo este README
+| GET | La interfaz muestra los tickets guardados
+| POST | Un ticket creado desde Angular aparece en la base de datos
+| PUT | Una modificación desde Angular permanece al recargar
+| DELETE | Un ticket eliminado desaparece de la interfaz y de la BD
+| Validación | El formulario impide enviar datos obligatorios vacíos o inválidos
+| Error | Con la API apagada, la interfaz muestra un mensaje de error
+| Persistencia | Los registros permanecen después de reiniciar la API
 
 ## Declaración de uso de Inteligencia Artificial
 
