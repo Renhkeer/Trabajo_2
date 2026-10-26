@@ -2,8 +2,6 @@
 
 Aplicación web full stack para registrar, consultar, editar y eliminar tickets de soporte técnico. Reemplaza el registro manual de solicitudes (mensajes y planillas) por una aplicación con base de datos, así los datos no se pierden al cerrar o reiniciar la aplicación.
 
-Evaluación N.° 2 — Electivo Angular, Instituto Profesional Virginio Gómez, sede Chillán.
-
 ## Autor
 
 Benjamin Canahuate
