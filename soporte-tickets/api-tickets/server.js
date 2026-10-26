@@ -10,24 +10,30 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    mensaje: 'API Biblioteca funcionando con SQL Server'
+    mensaje: 'API Tickets de Soporte funcionando con SQL Server'
   });
 });
 
-// GET /api/libros - Obtener todos
-app.get('/api/libros', async (req, res) => {
+// Revisa que vengan todos los campos obligatorios del ticket
+function faltanCampos(body) {
+  const { asunto, solicitante, descripcion, categoria, prioridad, estado } = body;
+  return !asunto || !solicitante || !descripcion || !categoria || !prioridad || !estado;
+}
+
+// GET /api/tickets - Obtener todos
+app.get('/api/tickets', async (req, res) => {
   try {
     const pool = await poolPromise;
-    const resultado = await pool.request().query('SELECT * FROM libros ORDER BY id DESC');
+    const resultado = await pool.request().query('SELECT * FROM tickets ORDER BY id DESC');
     res.status(200).json(resultado.recordset);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al consultar los libros' });
+    res.status(500).json({ mensaje: 'Error al consultar los tickets' });
   }
 });
 
-// GET /api/libros/:id - Obtener uno
-app.get('/api/libros/:id', async (req, res) => {
+// GET /api/tickets/:id - Obtener uno
+app.get('/api/tickets/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ mensaje: 'ID inválido' });
@@ -37,99 +43,89 @@ app.get('/api/libros/:id', async (req, res) => {
     const pool = await poolPromise;
     const resultado = await pool.request()
       .input('id', sql.Int, id)
-      .query('SELECT * FROM libros WHERE id = @id');
+      .query('SELECT * FROM tickets WHERE id = @id');
 
     if (resultado.recordset.length === 0) {
-      return res.status(404).json({ mensaje: 'Libro no encontrado' });
+      return res.status(404).json({ mensaje: 'Ticket no encontrado' });
     }
     res.status(200).json(resultado.recordset[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al consultar el libro' });
+    res.status(500).json({ mensaje: 'Error al consultar el ticket' });
   }
 });
 
-// POST /api/libros - Crear
-app.post('/api/libros', async (req, res) => {
-  const { titulo, autor, categoria, anio, disponible, editorial } = req.body;
-  
-  if (!titulo || !autor || !categoria || !anio || !editorial) {
+// POST /api/tickets - Crear
+app.post('/api/tickets', async (req, res) => {
+  if (faltanCampos(req.body)) {
     return res.status(400).json({ mensaje: 'Complete todos los campos obligatorios' });
   }
+  const { asunto, solicitante, descripcion, categoria, prioridad, estado } = req.body;
 
   try {
     const pool = await poolPromise;
+    // La fechaRegistro la pone la base de datos con GETDATE()
     const resultado = await pool.request()
-      .input('titulo', sql.VarChar, titulo.trim())
-      .input('autor', sql.VarChar, autor.trim())
-      .input('categoria', sql.VarChar, categoria.trim())
-      .input('editorial', sql.VarChar, editorial.trim())
-      .input('anio', sql.Int, Number(anio))
-      .input('disponible', sql.Bit, disponible ?? true)
+      .input('asunto', sql.NVarChar, asunto.trim())
+      .input('solicitante', sql.NVarChar, solicitante.trim())
+      .input('descripcion', sql.NVarChar, descripcion.trim())
+      .input('categoria', sql.NVarChar, categoria)
+      .input('prioridad', sql.NVarChar, prioridad)
+      .input('estado', sql.NVarChar, estado)
       .query(`
-        INSERT INTO libros (titulo, autor, categoria, anio, disponible, editorial)
-        OUTPUT INSERTED.id
-        VALUES (@titulo, @autor, @categoria, @anio, @disponible, @editorial)
+        INSERT INTO tickets (asunto, solicitante, descripcion, categoria, prioridad, estado)
+        OUTPUT INSERTED.*
+        VALUES (@asunto, @solicitante, @descripcion, @categoria, @prioridad, @estado)
       `);
-      
-    res.status(201).json({
-      id: resultado.recordset[0].id,
-      titulo: titulo.trim(),
-      autor: autor.trim(),
-      categoria: categoria.trim(),
-      anio: Number(anio),
-      disponible: disponible ?? true,
-      editorial: editorial.trim()
-    });
+
+    res.status(201).json(resultado.recordset[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al registrar el libro' });
+    res.status(500).json({ mensaje: 'Error al registrar el ticket' });
   }
 });
 
-// PUT /api/libros/:id - Actualizar
-app.put('/api/libros/:id', async (req, res) => {
+// PUT /api/tickets/:id - Actualizar
+app.put('/api/tickets/:id', async (req, res) => {
   const id = Number(req.params.id);
-  const { titulo, autor, categoria, anio, disponible, editorial } = req.body;
-
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ mensaje: 'ID inválido' });
   }
-  if (!titulo || !autor || !categoria || !anio || !editorial) {
+  if (faltanCampos(req.body)) {
     return res.status(400).json({ mensaje: 'Complete todos los campos obligatorios' });
   }
+  const { asunto, solicitante, descripcion, categoria, prioridad, estado } = req.body;
 
   try {
     const pool = await poolPromise;
     const resultado = await pool.request()
       .input('id', sql.Int, id)
-      .input('titulo', sql.VarChar, titulo.trim())
-      .input('autor', sql.VarChar, autor.trim())
-      .input('categoria', sql.VarChar, categoria.trim())
-      .input('editorial', sql.VarChar, editorial.trim())
-      .input('anio', sql.Int, Number(anio))
-      .input('disponible', sql.Bit, disponible)
+      .input('asunto', sql.NVarChar, asunto.trim())
+      .input('solicitante', sql.NVarChar, solicitante.trim())
+      .input('descripcion', sql.NVarChar, descripcion.trim())
+      .input('categoria', sql.NVarChar, categoria)
+      .input('prioridad', sql.NVarChar, prioridad)
+      .input('estado', sql.NVarChar, estado)
       .query(`
-        UPDATE libros 
-        SET titulo = @titulo, autor = @autor, categoria = @categoria, 
-            anio = @anio, disponible = @disponible, editorial = @editorial
+        UPDATE tickets
+        SET asunto = @asunto, solicitante = @solicitante, descripcion = @descripcion,
+            categoria = @categoria, prioridad = @prioridad, estado = @estado
         WHERE id = @id
       `);
 
     if (resultado.rowsAffected[0] === 0) {
-      return res.status(404).json({ mensaje: 'Libro no encontrado' });
+      return res.status(404).json({ mensaje: 'Ticket no encontrado' });
     }
-    res.status(200).json({ mensaje: 'Libro actualizado correctamente' });
+    res.status(200).json({ mensaje: 'Ticket actualizado correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar el libro' });
+    res.status(500).json({ mensaje: 'Error al actualizar el ticket' });
   }
 });
 
-// DELETE /api/libros/:id - Eliminar
-app.delete('/api/libros/:id', async (req, res) => {
+// DELETE /api/tickets/:id - Eliminar
+app.delete('/api/tickets/:id', async (req, res) => {
   const id = Number(req.params.id);
-  
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ mensaje: 'ID inválido' });
   }
@@ -138,15 +134,15 @@ app.delete('/api/libros/:id', async (req, res) => {
     const pool = await poolPromise;
     const resultado = await pool.request()
       .input('id', sql.Int, id)
-      .query('DELETE FROM libros WHERE id = @id');
+      .query('DELETE FROM tickets WHERE id = @id');
 
     if (resultado.rowsAffected[0] === 0) {
-      return res.status(404).json({ mensaje: 'Libro no encontrado' });
+      return res.status(404).json({ mensaje: 'Ticket no encontrado' });
     }
-    res.status(200).json({ mensaje: 'Libro eliminado correctamente' });
+    res.status(200).json({ mensaje: 'Ticket eliminado correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al eliminar el libro' });
+    res.status(500).json({ mensaje: 'Error al eliminar el ticket' });
   }
 });
 
