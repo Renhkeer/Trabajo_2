@@ -138,9 +138,7 @@ Los tests que crea Angular por defecto fallaban porque los componentes que usan 
 **Herramienta utilizada:** Claude Code (asistente de programación de Anthropic, modelo Claude), usado desde la terminal dentro del repositorio.
 
 **Actividades en las que se usó:**
-- **Estructura inicial:** renombrar el proyecto de la Actividad 06 (biblioteca) a tickets, quitar SSR y cambiar textos.
-- **Frontend:** generar el modelo `Ticket`, el servicio `TicketsService`, las rutas, el listado con etiquetas de color y los formularios con validaciones.
-- **Backend:** adaptar los endpoints de la API de libros a `/api/tickets`, manteniendo la misma estructura.
+- **Frontend:** generar el listado con etiquetas de color y los formularios con validaciones.
 - **Base de datos (ajuste a SQL Server):** la guía de la actividad está pensada para MySQL y yo usé SQL Server. La IA me ayudó a ajustar la base de datos a SQL Server: escribir el script `base-datos.sql` con tipos y funciones de SQL Server (`IDENTITY`, `NVARCHAR`, `DEFAULT GETDATE()`, restricciones `CHECK`, `OUTPUT INSERTED.*`), apuntar la conexión de `db.js` a la base `tickets_db` con autenticación de Windows, y probar el CRUD completo contra la base.
 - **Pruebas y documentación:** diagnosticar y corregir los tests unitarios que fallaban, y redactar este README.
 
