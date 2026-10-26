@@ -1,5 +1,5 @@
 -- Script de la base de datos del Sistema de Tickets de Soporte
--- Ejecutar en SQL Server (localhost\SQLEXPRESS), por ejemplo desde SSMS
+-- Ejecutar en SQL Server (localhost\SQLEXPRESS)
 -- Se puede ejecutar varias veces: solo crea lo que no existe
 
 IF DB_ID('tickets_db') IS NULL
